@@ -1,5 +1,5 @@
 import moment from 'moment';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 //@ts-ignore
 import DateTimePicker from 'react-datetime-picker';
 
@@ -7,7 +7,7 @@ import Modal from 'react-modal';
 import { useDispatch, useSelector } from 'react-redux';
 import Swal from 'sweetalert2';
 import { uiCloseModal } from '../../actions/ui';
-import { uiReducer } from '../../reducers/uiReducer';
+import { eventAddNew, eventClearActiveEvent } from '../../actions/events';
 
 const customStyles = {
 	content: {
@@ -22,26 +22,35 @@ const customStyles = {
 
 Modal.setAppElement('#root');
 
-const now = moment().minutes(0).seconds(0).add(1, 'hours');
+const now = moment().minutes(0).seconds(0);
 const nowPlusOne = now.clone().add(1, 'hours');
+
+const initEvent = {
+	title: '',
+	notes: '',
+	start: now.toDate(),
+	end: nowPlusOne.toDate(),
+};
 
 export const CalendarModal = () => {
 	const dispatch = useDispatch();
 
 	const { modalOpen } = useSelector((state) => (state as any).ui);
+	const { activeEvent } = useSelector((state) => (state as any).calendar);
 
 	const [dateStart, setDateStart] = useState(now.toDate());
 	const [dateEnd, setDateEnd] = useState(nowPlusOne.toDate());
 	const [titleValid, setTitleValid] = useState(true);
 
-	const [formValues, setFormValues] = useState({
-		title: 'evento',
-		notes: '',
-		start: now.toDate(),
-		end: nowPlusOne.toDate(),
-	});
+	const [formValues, setFormValues] = useState(initEvent);
 
 	const { notes, title, start, end } = formValues;
+
+	useEffect(() => {
+		if (activeEvent) {
+			setFormValues(activeEvent);
+		}
+	}, [activeEvent, setFormValues]);
 
 	const handleInputChange = ({ target }: { target: any }) => {
 		setFormValues({
@@ -51,7 +60,9 @@ export const CalendarModal = () => {
 	};
 
 	const closeModal = () => {
+		setFormValues(initEvent);
 		dispatch(uiCloseModal());
+		dispatch(eventClearActiveEvent());
 	};
 
 	const handleStartDateChange = (e: any) => {
@@ -87,6 +98,17 @@ export const CalendarModal = () => {
 		if (title.trim().length === 0) {
 			setTitleValid(false);
 		}
+
+		dispatch(
+			eventAddNew({
+				...formValues,
+				id: new Date().getTime(),
+				user: {
+					_id: '123',
+					name: 'Mario',
+				},
+			})
+		);
 
 		setTitleValid(true);
 		closeModal();
