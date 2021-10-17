@@ -72,3 +72,13 @@ body {
 	right: 25px;
 	line-height: 0;
 }
+
+.fab-danger {
+	position: fixed;
+	bottom: 25px;
+	left: 25px;
+}
+
+.fab-danger span {
+	margin-left: 10px;
+}
