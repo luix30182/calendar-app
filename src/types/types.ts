@@ -7,4 +7,12 @@ export enum types {
 	eventClearActiveEvent = '[EVENT] clear active event',
 	eventUpdate = '[Event] event update',
 	eventDeleted = '[Event] event deleted',
+
+	authChecking = '[Auth] checking login state',
+	authCheckingFinish = '[Auth] Finish checking login state',
+	authStartLogin = '[Auth] Start login',
+	authLogin = '[Auth] Login',
+	authStarRegister = '[Auth] Start segister',
+	authStartTokenRenew = '[Auth] Start token renew',
+	authLogout = '[Auth] Logout',
 }
