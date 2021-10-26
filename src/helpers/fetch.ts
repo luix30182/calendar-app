@@ -15,6 +15,26 @@ const fetchNoToken = (endPoint: string, data: any, method: string) => {
 	}
 };
 
-const fetchWithToken = () => {};
+const fetchWithToken = (endPoint: string, data = null, method = 'GET') => {
+	const url = `${baseUrl}/${endPoint}`;
+	const token = localStorage.getItem('token') || '';
+	if (method === 'GET') {
+		return fetch(url, {
+			method,
+			headers: {
+				'x-token': token,
+			},
+		});
+	} else {
+		return fetch(url, {
+			method,
+			headers: {
+				'Content-type': 'application/json',
+				'x-token': token,
+			},
+			body: JSON.stringify(data),
+		});
+	}
+};
 
 export { fetchNoToken, fetchWithToken };
