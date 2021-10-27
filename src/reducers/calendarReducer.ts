@@ -1,6 +1,4 @@
 import { types } from '../types/types';
-import moment from 'moment';
-
 export interface calendarState {
 	events: Array<calendarEvent>;
 	activeEvent: any;
@@ -19,19 +17,7 @@ export interface calendarEvent {
 }
 
 const initialState: calendarState = {
-	events: [
-		{
-			id: new Date().getTime(),
-			title: 'Birthday Sly',
-			start: moment().toDate(),
-			end: moment().add(2, 'hours').toDate(),
-			notes: ['Comprar pastel'],
-			user: {
-				_id: '123',
-				name: 'Mario',
-			},
-		},
-	],
+	events: [],
 	activeEvent: null,
 };
 
@@ -69,6 +55,11 @@ export const calendarReducer = (
 					(e) => state.activeEvent && e.id !== state.activeEvent.id
 				),
 				activeEvent: null,
+			};
+		case types.eventLoaded:
+			return {
+				...state,
+				events: [...action.payload],
 			};
 		default:
 			return state;
