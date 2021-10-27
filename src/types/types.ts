@@ -9,6 +9,7 @@ export enum types {
 	eventUpdate = '[Event] event update',
 	eventDeleted = '[Event] event deleted',
 	eventLoaded = '[Event] Events loaded',
+	eventLogout = '[Event] Events logout',
 
 	authChecking = '[Auth] checking login state',
 	authCheckingFinish = '[Auth] Finish checking login state',
